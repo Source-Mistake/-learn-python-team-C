@@ -336,3 +336,74 @@ def test_nested_list_comprehensions():
         (3, 7, 11),
         (4, 8, 12),
     ]
+
+    def test_list_sorting():
+    """Sorting lists with sorted() and list.sort()."""
+
+    numbers = [5, 2, 9, 1, 7]
+
+    # sorted() returns a new sorted list and leaves the original unchanged.
+    assert sorted(numbers) == [1, 2, 5, 7, 9]
+    assert numbers == [5, 2, 9, 1, 7]
+
+    # The reverse argument sorts in descending order.
+    assert sorted(numbers, reverse=True) == [9, 7, 5, 2, 1]
+
+    # The key argument customizes the sort. Here we sort words by length.
+    # The sort is stable, so equal-length words keep their original order.
+    words = ['banana', 'kiwi', 'apple', 'fig']
+    assert sorted(words, key=len) == ['fig', 'kiwi', 'apple', 'banana']
+
+    # list.sort() sorts in place and returns None.
+    assert numbers.sort() is None
+    assert numbers == [1, 2, 5, 7, 9]
+
+
+def test_list_filtering_and_slicing():
+    """Filtering with comprehensions/filter() and slicing with steps."""
+
+    numbers = list(range(1, 11))
+    assert numbers == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+    # Filtering with a list comprehension...
+    evens = [x for x in numbers if x % 2 == 0]
+    assert evens == [2, 4, 6, 8, 10]
+
+    # ...is equivalent to using the built-in filter() function.
+    assert list(filter(lambda x: x % 2 == 0, numbers)) == evens
+
+    # Slicing supports a step: list[start:stop:step].
+    assert numbers[2:5] == [3, 4, 5]
+    assert numbers[::2] == [1, 3, 5, 7, 9]  # every second item
+    assert numbers[1::2] == [2, 4, 6, 8, 10]  # every second item, starting at index 1
+    assert numbers[-3:] == [8, 9, 10]  # last three items
+
+    # A negative step reverses the list (returning a new list).
+    assert numbers[::-1] == [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+
+def test_list_comprehension_extras():
+    """More list comprehension patterns and built-in helpers."""
+
+    # A conditional expression (if/else) goes BEFORE the for clause,
+    # unlike a filtering if, which goes after it.
+    labels = ['even' if x % 2 == 0 else 'odd' for x in range(5)]
+    assert labels == ['even', 'odd', 'even', 'odd', 'even']
+
+    # Combine enumerate() with a comprehension to work with indexes.
+    names = ['Ann', 'Ben', 'Cy']
+    numbered = [f'{i}: {name}' for i, name in enumerate(names, start=1)]
+    assert numbered == ['1: Ann', '2: Ben', '3: Cy']
+
+    # Combine two lists element by element with zip().
+    prices = [2, 3, 5]
+    quantities = [10, 20, 30]
+    totals = [p * q for p, q in zip(prices, quantities)]
+    assert totals == [20, 60, 150]
+
+    # Built-in functions that work on lists.
+    scores = [88, 92, 75, 64]
+    assert sum(scores) == 319
+    assert max(scores) == 92
+    assert min(scores) == 64
+    assert sum(scores) / len(scores) == 79.75
